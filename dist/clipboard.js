@@ -426,7 +426,6 @@
     	let { value } = $$props;
     	let { class: className } = $$props;
     	const dispatch = createEventDispatcher();
-    	onMount(() => console.log("Simple"));
     	var clipboard = new ClipboardJS('.clip__');
 
     	clipboard.on('success', function (e) {

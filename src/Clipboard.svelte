@@ -4,7 +4,7 @@
   export let className
   export {className as class}
   const dispatch = createEventDispatcher();
-  onMount(()=>console.log("Simple"))
+ 
 
   var clipboard = new ClipboardJS('.clip__');
   clipboard.on('success', function (e) {
