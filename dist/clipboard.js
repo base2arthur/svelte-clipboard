@@ -87,6 +87,10 @@
     function text(data) {
         return document.createTextNode(data);
     }
+    function listen(node, event, handler, options) {
+        node.addEventListener(event, handler, options);
+        return () => node.removeEventListener(event, handler, options);
+    }
     function attr(node, attribute, value) {
         if (value == null)
             node.removeAttribute(attribute);
@@ -361,16 +365,17 @@
     	let div;
     	let div_class_value;
     	let current;
-    	const default_slot_template = /*#slots*/ ctx[3].default;
-    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[2], null);
+    	let mounted;
+    	let dispose;
+    	const default_slot_template = /*#slots*/ ctx[4].default;
+    	const default_slot = create_slot(default_slot_template, ctx, /*$$scope*/ ctx[3], null);
     	const default_slot_or_fallback = default_slot || fallback_block();
 
     	return {
     		c() {
     			div = element("div");
     			if (default_slot_or_fallback) default_slot_or_fallback.c();
-    			attr(div, "class", div_class_value = "clip__ " + /*className*/ ctx[1]);
-    			attr(div, "data-clipboard-text", /*value*/ ctx[0]);
+    			attr(div, "class", div_class_value = "clip__ " + /*className*/ ctx[0]);
     		},
     		m(target, anchor) {
     			insert(target, div, anchor);
@@ -380,29 +385,30 @@
     			}
 
     			current = true;
+
+    			if (!mounted) {
+    				dispose = listen(div, "click", /*click_handler*/ ctx[5]);
+    				mounted = true;
+    			}
     		},
     		p(ctx, [dirty]) {
     			if (default_slot) {
-    				if (default_slot.p && (!current || dirty & /*$$scope*/ 4)) {
+    				if (default_slot.p && (!current || dirty & /*$$scope*/ 8)) {
     					update_slot_base(
     						default_slot,
     						default_slot_template,
     						ctx,
-    						/*$$scope*/ ctx[2],
+    						/*$$scope*/ ctx[3],
     						!current
-    						? get_all_dirty_from_scope(/*$$scope*/ ctx[2])
-    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[2], dirty, null),
+    						? get_all_dirty_from_scope(/*$$scope*/ ctx[3])
+    						: get_slot_changes(default_slot_template, /*$$scope*/ ctx[3], dirty, null),
     						null
     					);
     				}
     			}
 
-    			if (!current || dirty & /*className*/ 2 && div_class_value !== (div_class_value = "clip__ " + /*className*/ ctx[1])) {
+    			if (!current || dirty & /*className*/ 1 && div_class_value !== (div_class_value = "clip__ " + /*className*/ ctx[0])) {
     				attr(div, "class", div_class_value);
-    			}
-
-    			if (!current || dirty & /*value*/ 1) {
-    				attr(div, "data-clipboard-text", /*value*/ ctx[0]);
     			}
     		},
     		i(local) {
@@ -417,6 +423,8 @@
     		d(detaching) {
     			if (detaching) detach(div);
     			if (default_slot_or_fallback) default_slot_or_fallback.d(detaching);
+    			mounted = false;
+    			dispose();
     		}
     	};
     }
@@ -425,36 +433,29 @@
     	let { $$slots: slots = {}, $$scope } = $$props;
     	let { value } = $$props;
     	let { class: className } = $$props;
-    	const dispatch = createEventDispatcher();
-    	var clipboard = new ClipboardJS('.clip__');
+    	createEventDispatcher();
 
-    	clipboard.on('success', function (e) {
-    		console.info('Action:', e.action);
-    		console.info('Text:', e.text);
-    		console.info('Trigger:', e.trigger);
-    		dispatch("copied");
-    		e.clearSelection();
-    	});
-
-    	clipboard.on('error', function (e) {
-    		console.error('Action:', e.action);
-    		console.error('Trigger:', e.trigger);
-    		dispatch("error");
-    	});
-
-    	$$self.$$set = $$props => {
-    		if ('value' in $$props) $$invalidate(0, value = $$props.value);
-    		if ('class' in $$props) $$invalidate(1, className = $$props.class);
-    		if ('$$scope' in $$props) $$invalidate(2, $$scope = $$props.$$scope);
+    	const click = () => {
+    		(async () => {
+    			await navigator.clipboard.writeText(value);
+    		})();
     	};
 
-    	return [value, className, $$scope, slots];
+    	const click_handler = () => click();
+
+    	$$self.$$set = $$props => {
+    		if ('value' in $$props) $$invalidate(2, value = $$props.value);
+    		if ('class' in $$props) $$invalidate(0, className = $$props.class);
+    		if ('$$scope' in $$props) $$invalidate(3, $$scope = $$props.$$scope);
+    	};
+
+    	return [className, click, value, $$scope, slots, click_handler];
     }
 
     class Clipboard extends SvelteComponent {
     	constructor(options) {
     		super();
-    		init(this, options, instance, create_fragment, safe_not_equal, { value: 0, class: 1 });
+    		init(this, options, instance, create_fragment, safe_not_equal, { value: 2, class: 0 });
     	}
     }
 

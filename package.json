@@ -1,7 +1,7 @@
 {
   "name": "svelte-clipboard",
   "author": "arthurmarinis",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Copy to clipboard component.",
   "svelte": "src/Clipboard.svelte",
   "module": "dist/clipboard.mjs",
@@ -19,8 +19,7 @@
     "rollup": "^2.3.4",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "rollup-plugin-svelte": "^7.0.0",
-    "svelte": "^3.42.4",
-    "clipboard": "^2.0.8"
+    "svelte": "^3.42.4"
   },
   "scripts": {
     "build": "rollup -c",
