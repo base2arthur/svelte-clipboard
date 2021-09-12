@@ -1,23 +1,26 @@
 {
-  "name": "svelte-component",
+  "name": "svelte-clipboard",
   "author": "arthurmarinis",
   "version": "1.0.0",
-  "description": "A Svelte component template.",
-  "svelte": "src/Index.svelte",
-  "module": "dist/component.mjs",
-  "main": "dist/component.js",
+  "description": "Copy to clipboard component.",
+  "svelte": "src/Clipboard.svelte",
+  "module": "dist/clipboard.mjs",
+  "main": "dist/clipboard.js",
   "keywords": [
     "svelte",
     "component",
     "copy me",
     "svelte-component"
   ],
-  "dependencies": {},
+  "dependencies": {
+    
+  },
   "devDependencies": {
     "rollup": "^2.3.4",
     "@rollup/plugin-node-resolve": "^11.0.0",
     "rollup-plugin-svelte": "^7.0.0",
-    "svelte": "^3.42.4"
+    "svelte": "^3.42.4",
+    "clipboard": "^2.0.8"
   },
   "scripts": {
     "build": "rollup -c",
@@ -25,8 +28,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/base2arthur/svelte-component.git"
+    "url": "git+https://github.com/base2arthur/svelte-clipboard.git"
   },
-  "homepage": "https://github.com/base2arthur/svelte-component#readme",
+  "homepage": "https://github.com/base2arthur/svelte-clipboard#readme",
   "license": "MIT"
 }
