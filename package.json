@@ -1,7 +1,7 @@
 {
   "name": "svelte-clipboard",
   "author": "arthurmarinis",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Copy to clipboard component.",
   "svelte": "src/Clipboard.svelte",
   "module": "dist/clipboard.mjs",

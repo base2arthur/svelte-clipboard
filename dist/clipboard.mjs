@@ -91,11 +91,12 @@ function instance($$self, $$props, $$invalidate) {
 	let { $$slots: slots = {}, $$scope } = $$props;
 	let { value } = $$props;
 	let { class: className } = $$props;
-	createEventDispatcher();
+	const dispatch = createEventDispatcher();
 
 	const click = () => {
 		(async () => {
 			await navigator.clipboard.writeText(value);
+			dispatch("copied");
 		})();
 	};
 

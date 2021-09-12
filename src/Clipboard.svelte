@@ -10,6 +10,7 @@
 const click = ()=>{
   (async () => {
     await navigator.clipboard.writeText(value);
+    dispatch("copied")
   })();
 }
  
